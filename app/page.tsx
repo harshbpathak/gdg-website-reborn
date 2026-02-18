@@ -15,7 +15,7 @@ export default function Home() {
       <section id="home">
         <BaseHeroSection description="Empowering Developers, Elevating Innovation at GDG NITH Chapter." />
       </section>
-      <PromoBanner />
+      
       <section id="about">
         <AboutScrollSection />
       </section>

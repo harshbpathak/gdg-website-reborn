@@ -54,6 +54,7 @@ function EventsSection() {
   mx-auto
   p-0 pt-10 md:p-16 md:pt-0
   flex flex-col items-start gap-5
+  
   -mt-70 md:-mt-60
   relative
   translate-y-45
@@ -73,7 +74,7 @@ function EventsSection() {
             <Separator className="my-2 bg-(--primary) h-0.5 rounded-full max-w-[200px]" />
 
             <p className="text-muted-foreground">
-              Meet our amazing members who are passionate about technology and innovation.
+              Explore our amazing events and workshops that empower developers and foster innovation
             </p>
           </div>
         </div>
