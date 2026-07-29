@@ -53,7 +53,7 @@ export function SocietyLeadSection() {
                     “
                   </span>
                   Leadership is not about authority, it is about responsibility.
-                  Build people first — technology will follow.
+                  Build people first, technology will follow.
                 </blockquote>
               </div>
             </div>

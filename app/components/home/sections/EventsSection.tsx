@@ -81,7 +81,6 @@ function EventsSection() {
       </div>
       <CardCarousel
         images={events.map(event => ({ src: event.image, alt: event.title }))}
-        autoplayDelay={2000}
         showPagination={true}
         showNavigation={true}
         className="w-full"

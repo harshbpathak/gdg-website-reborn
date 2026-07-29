@@ -10,7 +10,7 @@ export default function CTA_Button({
   return (
     <Link href="/events">
       <button
-        className={`bg-black h-12 w-48 text-white font-Tektur tracking-wide rounded-full hover:opacity-90 dark:hover:opacity-80 duration-200 transition-all ${className}`}
+        className={`bg-black dark:bg-white h-12 w-48 text-white dark:text-black font-Tektur tracking-wide rounded-full hover:opacity-90 dark:hover:opacity-80 duration-200 transition-all ${className}`}
       >
         {text || "View All Events"}
       </button>

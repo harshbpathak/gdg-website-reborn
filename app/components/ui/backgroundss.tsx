@@ -13,3 +13,5 @@ export function BackgroundDecorativeCircles() {
         </>
     );
 }
+
+export default BackgroundDecorativeCircles;

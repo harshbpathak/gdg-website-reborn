@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+// Heavy animation library removed – using plain CSS transitions instead
 import { toast } from "react-hot-toast";
 import { Loader2, ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
-import { BackgroundDecorativeCircles } from "@/app/components/ui/backgroundss";
+import dynamic from "next/dynamic";
+const BackgroundDecorativeCircles = dynamic(() => import("@/app/components/ui/backgroundss").then((mod) => mod.default), { ssr: false });
 
 const TECHNICAL_DOMAINS = [
   "Web Development",
@@ -81,7 +82,14 @@ export default function SophomoreInterviewApplyPage() {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (parsed.formData) setFormData(parsed.formData);
+          if (parsed.formData) {
+            setFormData(prev => ({
+              ...prev,
+              ...parsed.formData,
+              technical_domains: Array.isArray(parsed.formData.technical_domains) ? parsed.formData.technical_domains : prev.technical_domains,
+              non_technical_domains: Array.isArray(parsed.formData.non_technical_domains) ? parsed.formData.non_technical_domains : prev.non_technical_domains
+            }));
+          }
           if (parsed.step) setStep(parsed.step);
         } catch(e) {}
       }
@@ -196,6 +204,40 @@ export default function SophomoreInterviewApplyPage() {
 
       if (error) throw error;
       
+      // Send to Google Sheets via Apps Script Web App
+      try {
+        const payload = {
+          Name: formData.name,
+          Email: formData.email,
+          "Roll Number": formData.roll_no,
+          "Contact Number": formData.contact_no,
+          "Technical Domains": finalTechDomains.join(", "),
+          "Non-Technical Domains": nonTechDomainString,
+          Skills: formData.skills,
+          "Resume URL": formData.resume_url,
+          "Prior Experience": formData.prior_experience,
+          "Why Join GDG": formData.why_join_gdg,
+          Expectations: formData.expectations,
+          "Available Year Round": formData.available_year_round ? "Yes" : "No",
+          "Attended GDG Events": formData.attended_gdg_events ? "Yes" : "No",
+          "Attended Events List": formData.attended_events_list,
+          "Part of Other Clubs": formData.part_of_other_clubs ? "Yes" : "No",
+          "Other Clubs Details": formData.other_clubs_details,
+        };
+
+        await fetch("https://script.google.com/macros/s/AKfycbzCVLla7R1jxLBm83RZGt-nKBnRDIA1G-nLJv2OoenQjkoM20XB4ct_6zXnKReYgPt8UA/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain",
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (sheetError) {
+        console.error("Failed to sync to Google Sheets:", sheetError);
+        // We don't throw here so the user still sees success if Supabase worked
+      }
+      
       setHasApplied(true);
       if (typeof window !== "undefined") localStorage.removeItem("sophomore_form_draft");
       toast.success("Application submitted successfully!");
@@ -215,21 +257,25 @@ export default function SophomoreInterviewApplyPage() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background p-4 relative overflow-hidden">
         <BackgroundDecorativeCircles />
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-          className="bg-card p-8 md:p-10 rounded-3xl border shadow-xl max-w-lg w-full text-center relative z-10 mx-auto"
-        >
+        <div className="bg-card p-8 md:p-10 rounded-3xl border shadow-xl max-w-lg w-full text-center relative z-10 mx-auto">
           <div className="w-16 h-16 md:w-20 md:h-20 bg-[#34A853]/10 text-[#34A853] rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Application Received!</h2>
           <p className="text-muted-foreground mb-8 text-sm md:text-base">
-            Thank you for applying to GDG NIT Hamirpur. We've received your application and our team will be in touch with you shortly regarding the next steps of the interview process.
+            Thank you for applying to GDG NIT Hamirpur. We've received your application. Please join our WhatsApp group for all further updates regarding the interview process.
           </p>
-          <Button className="w-full rounded-xl bg-[#4285F4] hover:bg-[#3367D6] h-12 text-sm md:text-base" onClick={() => router.push('/')}>
-            Return Home
-          </Button>
-        </motion.div>
+          <div className="flex flex-col gap-3">
+            <Button className="w-full rounded-xl bg-[#25D366] hover:bg-[#128C7E] text-white dark:bg-[#25D366] dark:text-white dark:hover:bg-[#128C7E] h-12 text-sm md:text-base font-medium shadow-md shadow-[#25D366]/20" asChild>
+              <a href="https://chat.whatsapp.com/JGGcMa9r5ov1poONByOVKy" target="_blank" rel="noopener noreferrer">
+                Join WhatsApp Group
+              </a>
+            </Button>
+            <Button className="w-full rounded-xl bg-[#4285F4] hover:bg-[#3367D6] text-white dark:bg-[#4285F4] dark:text-white dark:hover:bg-[#3367D6] h-12 text-sm md:text-base" onClick={() => router.push('/')}>
+              Return Home
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -262,9 +308,9 @@ export default function SophomoreInterviewApplyPage() {
 
         {/* Form Container */}
         <div className="bg-card rounded-3xl border shadow-lg p-5 md:p-10">
-          <AnimatePresence mode="wait">
+          <div>
             {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div className="transition-opacity duration-300">
                 <h2 className="text-xl md:text-2xl font-bold mb-6">Personal Details</h2>
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
@@ -286,11 +332,11 @@ export default function SophomoreInterviewApplyPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div className="transition-opacity duration-300">
                 <h2 className="text-xl md:text-2xl font-bold mb-6">Domains & Skills</h2>
                 <div className="space-y-8">
                   
@@ -313,13 +359,13 @@ export default function SophomoreInterviewApplyPage() {
                       ))}
                     </div>
                     {formData.technical_domains.includes("Other") && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="pt-2">
+                      <div className="pt-2">
                         <Input 
                           placeholder="Please specify your technical domain..." 
                           value={formData.other_technical_domain}
                           onChange={(e) => setFormData({...formData, other_technical_domain: e.target.value})}
                         />
-                      </motion.div>
+                      </div>
                     )}
                   </div>
 
@@ -342,13 +388,13 @@ export default function SophomoreInterviewApplyPage() {
                       ))}
                     </div>
                     {formData.non_technical_domains.includes("Other") && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="pt-2">
+                      <div className="pt-2">
                         <Input 
                           placeholder="Please specify your non-technical domain..." 
                           value={formData.other_non_technical_domain}
                           onChange={(e) => setFormData({...formData, other_non_technical_domain: e.target.value})}
                         />
-                      </motion.div>
+                      </div>
                     )}
                   </div>
 
@@ -371,11 +417,11 @@ export default function SophomoreInterviewApplyPage() {
                   </div>
 
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {step === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div className="transition-opacity duration-300">
                 <h2 className="text-xl md:text-2xl font-bold mb-6">Experience & Motivation</h2>
                 <div className="space-y-6">
                   
@@ -409,11 +455,11 @@ export default function SophomoreInterviewApplyPage() {
                   </div>
 
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {step === 4 && (
-              <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div>
                 <h2 className="text-xl md:text-2xl font-bold mb-6">Review & Submit</h2>
                 <div className="space-y-6">
                   
@@ -450,9 +496,9 @@ export default function SophomoreInterviewApplyPage() {
                   </div>
 
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
 
           {/* Navigation */}
           <div className="flex justify-between items-center mt-8 md:mt-10 pt-5 md:pt-6 border-t">
@@ -463,11 +509,11 @@ export default function SophomoreInterviewApplyPage() {
             ) : <div></div>}
             
             {step < 4 ? (
-              <Button onClick={nextStep} className="gap-1 md:gap-2 bg-[#4285F4] hover:bg-[#3367D6] text-white rounded-xl h-10 md:h-12 px-6 md:px-8 shadow-md text-sm">
+              <Button onClick={nextStep} className="gap-1 md:gap-2 bg-[#4285F4] hover:bg-[#3367D6] text-white dark:bg-[#4285F4] dark:text-white dark:hover:bg-[#3367D6] rounded-xl h-10 md:h-12 px-6 md:px-8 shadow-md text-sm">
                 Next <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={!formData.confirmed_accurate || submitting} className="gap-1 md:gap-2 bg-[#34A853] hover:bg-[#2d9249] text-white rounded-xl h-10 md:h-12 px-6 md:px-8 shadow-lg shadow-[#34A853]/20 text-sm">
+              <Button onClick={handleSubmit} disabled={!formData.confirmed_accurate || submitting} className="gap-1 md:gap-2 bg-[#34A853] hover:bg-[#2d9249] text-white dark:bg-[#34A853] dark:text-white dark:hover:bg-[#2d9249] rounded-xl h-10 md:h-12 px-6 md:px-8 shadow-lg shadow-[#34A853]/20 text-sm">
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} 
                 Submit
               </Button>

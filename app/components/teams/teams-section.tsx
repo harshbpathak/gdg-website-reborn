@@ -77,14 +77,14 @@ export const TeamsSection = () => {
 
       <div className="space-y-8">
         {/* Row 1: Left Scroll - 3rd Year */}
-        <InfiniteSlider gap={24} speed={75} speedOnHover={50}>
+        <InfiniteSlider gap={24} speed={5} speedOnHover={2}>
           {thirdYearMembers.map((member, idx) => (
             <TeamMemberCard key={idx} imageUrl={member.image} />
           ))}
         </InfiniteSlider>
 
         {/* Row 2: Right Scroll (Reverse) - 2nd Year */}
-        <InfiniteSlider gap={24} speed={75} speedOnHover={50} reverse>
+        <InfiniteSlider gap={24} speed={5} speedOnHover={2} reverse>
           {secondYearMembers.map((member, idx) => (
             <TeamMemberCard key={idx + 10} imageUrl={member.image} />
           ))}

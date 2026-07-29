@@ -202,7 +202,7 @@ export function MembershipFormModal({
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl text-base font-semibold bg-[#4285F4] hover:bg-[#3367D6] text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full h-12 rounded-xl text-base font-semibold bg-[#4285F4] hover:bg-[#3367D6] text-white dark:bg-[#4285F4] dark:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   {isSubmitting ? (
                     <>

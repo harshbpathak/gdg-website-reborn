@@ -11,13 +11,13 @@ import { BackgroundDecorativeCircles } from "@/app/components/ui/backgroundss";
 
 const SophomoreInterviewBanner = () => {
   return (
-    <section className="relative w-full overflow-hidden bg-white dark:bg-[#0a0a0f] py-20 md:py-28">
+    <section className="relative w-full overflow-hidden bg-white dark:bg-[#0a0a0f] py-28 md:py-40">
       {/* Google-themed background */}
       <div className="absolute inset-0 pointer-events-none">
         <BackgroundDecorativeCircles />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 max-w-4xl">
+      <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,14 +25,14 @@ const SophomoreInterviewBanner = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#4285F4]/10 dark:bg-[#4285F4]/20 text-[#4285F4] text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4285F4]/10 dark:bg-[#4285F4]/20 text-[#4285F4] text-base font-medium mb-8">
             <Sparkles className="w-4 h-4" />
             Sophomore Interviews 2026
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+          <h2 className="text-4xl md:text-7xl font-bold text-foreground mb-8 leading-tight">
             Ready to Build With Us?
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
             Take the next step in your GDG journey. Show us your skills, passion, and drive for development.
           </p>
 
@@ -41,7 +41,7 @@ const SophomoreInterviewBanner = () => {
               size="lg"
               className={cn(
                 "relative overflow-hidden rounded-full px-10 py-7 text-lg font-semibold w-full sm:w-auto",
-                "bg-[#4285F4] hover:bg-[#3367D6] text-white",
+                "bg-[#4285F4] hover:bg-[#3367D6] text-white dark:bg-[#4285F4] dark:text-white",
                 "shadow-lg hover:shadow-xl shadow-[#4285F4]/25",
                 "transition-all duration-300 hover:scale-[1.02]"
               )}

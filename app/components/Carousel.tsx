@@ -21,16 +21,7 @@ export default function CircularCarousel({ images, autoPlayInterval = 3000 }: Ca
   useEffect(() => { indexRef.current = activeIndex; }, [activeIndex]);
 
   // --- AUTO PLAY ---
-  useEffect(() => {
-    // Pause auto-play if hovering or dragging
-    if (isHovered || isDragging) return;
-    
-    const interval = setInterval(() => {
-      handleNext();
-    }, autoPlayInterval);
-    
-    return () => clearInterval(interval);
-  }, [isHovered, isDragging, autoPlayInterval]);
+  // Auto-play removed as per user request
 
   // --- NAVIGATION ---
   const handleNext = useCallback(() => {
@@ -164,19 +155,19 @@ export default function CircularCarousel({ images, autoPlayInterval = 3000 }: Ca
       </motion.div>
 
       {/* --- CONTROLS --- */}
-      {/* Hidden on Mobile (hidden), Visible on Desktop (md:flex) */}
+      {/* Always visible on both Mobile and Desktop */}
       <button
         onClick={handlePrev}
-        className="hidden md:flex absolute left-8 z-50 p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white 
-                   opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/20 hover:scale-110 active:scale-95"
+        className="flex absolute left-4 md:left-8 z-50 p-3 md:p-4 rounded-full bg-black/20 md:bg-white/10 backdrop-blur-md border border-white/20 text-white 
+                   opacity-100 transition-all duration-300 hover:bg-white/20 hover:scale-110 active:scale-95 shadow-lg"
       >
-        <ChevronLeft className="w-8 h-8" />
+        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
       </button>
 
       <button
         onClick={handleNext}
-        className="hidden md:flex absolute right-8 z-50 p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white 
-                   opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/20 hover:scale-110 active:scale-95"
+        className="flex absolute right-4 md:right-8 z-50 p-3 md:p-4 rounded-full bg-black/20 md:bg-white/10 backdrop-blur-md border border-white/20 text-white 
+                   opacity-100 transition-all duration-300 hover:bg-white/20 hover:scale-110 active:scale-95 shadow-lg"
       >
         <ChevronRight className="w-8 h-8" />
       </button>
