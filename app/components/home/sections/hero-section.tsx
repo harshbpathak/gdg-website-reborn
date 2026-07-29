@@ -1,10 +1,12 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { cn, smoothScrollTo } from "@/lib/utils";
+import { ArrowRight, Users } from "lucide-react";
 import { BorderBeam } from "@/app/components/ui/border-beam";
 import Image from "next/image";
 import { OrbitingGraphic } from "@/app/components/ui/floating-orbitals";
 import { BackgroundDecorativeCircles } from "@/app/components/ui/backgroundss";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 interface BaseHeroSectionProps {
     title?: string | React.ReactNode;
@@ -52,6 +54,20 @@ function AnimatedTitle() {
 }
 
 function BaseHeroSection(props: BaseHeroSectionProps) {
+    const [memberCount, setMemberCount] = useState(0);
+
+    useEffect(() => {
+        import("@/lib/supabase/client").then(({ createClient }) => {
+            const supabase = createClient();
+            supabase
+                .from("members")
+                .select("*", { count: "exact", head: true })
+                .then(({ count, error }) => {
+                    if (!error && count !== null) setMemberCount(count);
+                });
+        });
+    }, []);
+
     return <section
         id="hero"
         className={cn("w-full relative min-h-screen py-16 pt-24 bg-white dark:bg-[#0a0a0f] overflow-hidden")}
@@ -87,18 +103,39 @@ function BaseHeroSection(props: BaseHeroSectionProps) {
                     data-aos="fade-up"
                     data-aos-anchor-placement="center-bottom"
                 >
-                    <button className="relative px-8 py-4 text-base font-semibold rounded-full bg-[#4285F4] dark:bg-white text-white dark:text-black hover:bg-[#3367D6] dark:hover:bg-gray-200 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-3 group overflow-hidden" onClick={() => window.location.href = "#events"}>
-                        Our Events
-                        <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                    <button 
+                        className="relative px-8 py-4 text-base font-semibold rounded-full bg-[#4285F4] dark:bg-white text-white dark:text-black hover:bg-gradient-to-r hover:from-[#EA4335] hover:via-[#FBBC05] hover:to-[#34A853] hover:text-white transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(234,67,53,0.5)] flex items-center gap-3 group overflow-hidden" 
+                        onClick={() => window.location.href = "#events"}
+                    >
+                        Check out events !!
+                        <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
                         <BorderBeam
-                            size={100}
-                            duration={8}
-                            borderWidth={2}
+                            size={120}
+                            duration={4}
+                            borderWidth={3}
                             colorFrom="#EA4335"
                             colorTo="#FBBC05"
                             delay={0}
                         />
                     </button>
+
+                    {/* Live Member Count Badge */}
+                    {memberCount > 0 && (
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 1.5, type: "spring", stiffness: 200 }}
+                            onClick={() => smoothScrollTo('sophomore-registration', 800)}
+                            className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-[#34A853]/10 dark:bg-[#34A853]/20 text-[#34A853] hover:bg-[#34A853]/20 dark:hover:bg-[#34A853]/30 transition-all duration-300 cursor-pointer border border-[#34A853]/20 hover:border-[#34A853]/40 group"
+                        >
+                            <Users className="w-4 h-4" />
+                            <span className="text-sm font-semibold">
+                                {memberCount}+ Community Members
+                            </span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                        </motion.button>
+                    )}
+
                     {props.children}
                 </div>
             </div>

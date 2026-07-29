@@ -2,7 +2,7 @@
 
 import Footer from "./components/footer";
 import { BaseHeroSection } from "./components/home/sections/hero-section";
-import PromoBanner from "./components/home/sections/promo-banner";
+import SophomoreInterviewBanner from "./components/home/sections/promo-banner";
 import { AboutScrollSection } from "./components/about/about-scroll-section";
 import { TeamsSection } from "./components/teams/teams-section";
 import EventsSection from "./components/home/sections/EventsSection";
@@ -15,7 +15,11 @@ export default function Home() {
       <section id="home">
         <BaseHeroSection description="Empowering Developers, Elevating Innovation at GDG NITH Chapter." />
       </section>
-      
+
+      <section id="sophomore-registration">
+        <SophomoreInterviewBanner />
+      </section>
+
       <section id="about">
         <AboutScrollSection />
       </section>

@@ -1,163 +1,70 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
 import { motion } from "framer-motion";
-import { cn, smoothScrollTo } from "@/lib/utils";
-import { ArrowRight, ArrowUpRight, Sparkle, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowRight, Sparkles, ClipboardCheck } from "lucide-react";
+import { BorderBeam } from "@/app/components/ui/border-beam";
+import { BackgroundDecorativeCircles } from "@/app/components/ui/backgroundss";
 
-const PromoBanner = () => {
-    const [timeLeft, setTimeLeft] = useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-    });
+const SophomoreInterviewBanner = () => {
+  return (
+    <section className="relative w-full overflow-hidden bg-white dark:bg-[#0a0a0f] py-20 md:py-28">
+      {/* Google-themed background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundDecorativeCircles />
+      </div>
 
-    // Set target date to Friday, Feb 6th, 2026 based on user context
-    const targetDate = new Date("2026-02-06T00:00:00");
+      <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#4285F4]/10 dark:bg-[#4285F4]/20 text-[#4285F4] text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4" />
+            Sophomore Interviews 2026
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+            Ready to Build With Us?
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Take the next step in your GDG journey. Show us your skills, passion, and drive for development.
+          </p>
 
-    useEffect(() => {
-        const calculateTimeLeft = () => {
-            const difference = +targetDate - +new Date();
-            let newTimeLeft = {
-                days: 0,
-                hours: 0,
-                minutes: 0,
-                seconds: 0,
-            };
-
-            if (difference > 0) {
-                newTimeLeft = {
-                    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-                    minutes: Math.floor((difference / 1000 / 60) % 60),
-                    seconds: Math.floor((difference / 1000) % 60),
-                };
-            }
-            return newTimeLeft;
-        };
-
-        setTimeLeft(calculateTimeLeft());
-
-        const timer = setInterval(() => {
-            setTimeLeft(calculateTimeLeft());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    return (
-        <section className="relative w-full overflow-hidden bg-background py-0">
-            {/* Increased height to ensure text visibility and prevent cropping */}
-            <div className="relative w-full min-h-dvh flex items-center justify-center mx-auto overflow-hidden">
-                {/* Background Image */}
-                <Image
-                    src="/assets/abyssBg.png"
-                    alt="Promo Banner Background"
-                    fill
-                    className="object-cover w-full z-1" // Changed to object-cover for better mobile fill
-                    priority
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button
+              size="lg"
+              className={cn(
+                "relative overflow-hidden rounded-full px-10 py-7 text-lg font-semibold w-full sm:w-auto",
+                "bg-[#4285F4] hover:bg-[#3367D6] text-white",
+                "shadow-lg hover:shadow-xl shadow-[#4285F4]/25",
+                "transition-all duration-300 hover:scale-[1.02]"
+              )}
+              asChild
+            >
+              <Link href="/sophomore-interviews/apply">
+                <ClipboardCheck className="w-5 h-5 mr-3" />
+                Apply Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+                <BorderBeam
+                  size={80}
+                  duration={6}
+                  borderWidth={2}
+                  colorFrom="#FBBC05"
+                  colorTo="#EA4335"
                 />
-
-                <div className="relative z-20 container mx-auto px-4 py-12 md:py-0 flex flex-col md:flex-row items-center md:items-end justify-center md:justify-end gap-8 h-full min-h-dvh md:min-h-0">
-                    <div className="flex flex-col items-center md:items-start w-full md:w-auto mt-20 md:mt-0">
-                        <Image src="/assets/abyssLogo.png" alt="ABYSS" width={200} height={200} className="lg:h-16 h-12 w-auto mb-4 md:mb-0" />
-                        <Image src="/assets/abyssHead.png" alt="ABYSS" width={200} height={200} className="lg:h-60 h-32 md:h-40 w-auto" />
-
-                        <Image
-                            src="/assets/abyssDate.png"
-                            alt="ABYSS Date"
-                            width={200}
-                            height={200}
-                            className="lg:h-24 h-10 md:h-14 w-auto"
-                        />
-
-
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className={cn("hidden md:inline-flex")}
-                            asChild>
-                            <Link href="/events/Abyss">
-                                LEARN MORE
-                                <ArrowUpRight size={20} className="animate-pulse size-4" />
-                            </Link>
-                        </Button>
-                    </div>
-                    {/* Main Content Area - Shifted to the right to avoid covering the ABYSS logo on the left */}
-                    <div className="flex flex-col items-center md:items-end gap-8 w-full md:w-auto md:ml-auto mb-10 md:mb-0 text-center md:text-right">
-
-                        {/* Countdown & Text */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="flex flex-col items-center md:items-end text-center md:text-right text-white"
-                        >
-                            <div className="flex items-center justify-center md:justify-end gap-2 mb-4 md:mb-2">
-                                <Image src="/assets/gemini-color.png" width={20} height={20} alt="Gemini" className="animate-pulse" />
-                                <h2 className="text-xl md:text-2xl font-bold uppercase tracking-widest text-white drop-shadow-lg">
-                                    Registration Closing Soon
-                                </h2>
-                            </div>
-
-                            <div className="flex gap-2 md:gap-4 text-center justify-center md:justify-end">
-                                <CountdownUnit value={timeLeft.days} label="Days" color="border-blue-500 text-blue-400" />
-                                <CountdownUnit value={timeLeft.hours} label="Hours" color="border-red-500 text-red-400" />
-                                <CountdownUnit value={timeLeft.minutes} label="Mins" color="border-yellow-500 text-yellow-400" />
-                                <CountdownUnit value={timeLeft.seconds} label="Secs" color="border-green-500 text-green-400" />
-                            </div>
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="flex flex-col items-center md:items-end gap-3 justify-end flex-wrap mt-8 md:mt-10"
-                            >
-                                <Button
-                                    size="lg"
-                                    className={cn(
-                                        "relative group overflow-hidden text-base md:text-lg font-bold px-6 py-4 md:px-8 md:py-6 rounded-full mt-4 transition-all",
-                                        "bg-white text-neutral-900 hover:scale-105 border-2 border-white hover:bg-white/10 backdrop-blur-lg hover:text-white shadow-xl hover:shadow-2xl"
-                                    )}
-                                    asChild>
-                                    <Link href="https://gdg.community.dev/events/details/google-gdg-ludhiana-presents-gdg-abyss-the-depth-stares-back/?code=NITH">
-                                        <Sparkles size={20} className="animate-pulse size-4" />
-                                        REGISTER NOW
-                                    </Link>
-                                </Button>
-
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="md:hidden text-white/50 hover:text-white mt-2"
-                                    onClick={() => smoothScrollTo('events', 600)}
-                                    asChild>
-                                    <a href="#events">
-                                        LEARN MORE <ArrowUpRight size={16} />
-                                    </a>
-                                </Button>
-
-                            </motion.div>
-                        </motion.div>
-
-                        {/* Right Side: CTA Button */}
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    );
+              </Link>
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
 };
 
-const CountdownUnit = ({ value, label, color }: { value: number; label: string, color: string }) => (
-    <div className={`flex flex-col items-center p-2 rounded-xl border ${color} min-w-[50px] md:min-w-[70px] shadow-lg bg-black/40 backdrop-blur-xl`}>
-        <span className={`text-lg md:text-2xl font-bold font-mono ${color.split(' ')[1]}`}>{String(value).padStart(2, '0')}</span>
-        <span className="text-[8px] md:text-[10px] uppercase tracking-wider text-white/50 font-medium">{label}</span>
-    </div>
-);
-
-export default PromoBanner;
+export default SophomoreInterviewBanner;

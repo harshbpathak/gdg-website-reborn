@@ -4,6 +4,7 @@ import "./globals.css";
 import { Provider } from "./provider";
 import { Navbar } from "./components/navbar/navbar";
 
+
 const productSans = localFont({
   src: [
     {

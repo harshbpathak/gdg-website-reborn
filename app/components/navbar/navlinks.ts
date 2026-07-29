@@ -8,6 +8,7 @@ const navlinks: INavLinks[] = [
   { text: "Home", to: "/", anchorId: "home" },
   { text: "Events", to: "/events", anchorId: "events" },
   { text: "Team", to: "/team", anchorId: "team" },
+  { text: "Sophomore Interviews", to: "/sophomore-interviews" },
   { text: "Projects", to: "/coming-soon" },
   { text: "Contact Us", to: "/contact", anchorId: "contact" },
 ];
