@@ -29,8 +29,8 @@ export function Provider({ children }: { children: React.ReactNode }) {
       />
       <NextThemesProvider
         themes={all_themes as unknown as string[]}
-        defaultTheme="system"
-        enableSystem
+        defaultTheme="light"
+        enableSystem={false}
         attribute="class"
       >
         <div 
