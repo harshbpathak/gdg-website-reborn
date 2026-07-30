@@ -447,6 +447,19 @@ export default function SophomoreInterviewApplyPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-5 bg-muted/30 rounded-2xl border">
                     <div className="flex items-center justify-between col-span-1 md:col-span-2">
+                      <Label className="text-sm md:text-base">Have you attended any GDG events before?</Label>
+                      <input type="checkbox" className="w-5 h-5 accent-[#EA4335]" checked={formData.attended_gdg_events} onChange={(e) => setFormData({...formData, attended_gdg_events: e.target.checked})} />
+                    </div>
+                    {formData.attended_gdg_events && (
+                      <div className="col-span-1 md:col-span-2 space-y-2 mt-2 md:mt-0">
+                        <Label className="text-sm md:text-base">Event Details</Label>
+                        <Input placeholder="Which events did you attend?" value={formData.attended_events_list} onChange={(e) => setFormData({...formData, attended_events_list: e.target.value})} />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-5 bg-muted/30 rounded-2xl border">
+                    <div className="flex items-center justify-between col-span-1 md:col-span-2">
                       <Label className="text-sm md:text-base">Are you part of other clubs/societies?</Label>
                       <input type="checkbox" className="w-5 h-5 accent-[#4285F4]" checked={formData.part_of_other_clubs} onChange={(e) => setFormData({...formData, part_of_other_clubs: e.target.checked})} />
                     </div>
