@@ -128,6 +128,10 @@ export default function SophomoreInterviewApplyPage() {
       toast.error("Please complete all personal details");
       return;
     }
+    if (step === 1 && !formData.email.toLowerCase().endsWith("@nith.ac.in")) {
+      toast.error("Please use your college email ID (@nith.ac.in)");
+      return;
+    }
     if (step === 2 && (formData.technical_domains.length === 0 && formData.non_technical_domains.length === 0)) {
       toast.error("Please select at least one domain");
       return;
@@ -320,11 +324,11 @@ export default function SophomoreInterviewApplyPage() {
                     </div>
                     <div className="space-y-2">
                       <Label>Email <span className="text-red-500">*</span></Label>
-                      <Input value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. john@nith.ac.in" />
+                      <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. 25XXXXXX@nith.ac.in" />
                     </div>
                     <div className="space-y-2">
                       <Label>Roll Number <span className="text-red-500">*</span></Label>
-                      <Input value={formData.roll_no} onChange={(e) => setFormData({...formData, roll_no: e.target.value})} placeholder="e.g. 23XXXX" />
+                      <Input value={formData.roll_no} onChange={(e) => setFormData({...formData, roll_no: e.target.value})} placeholder="e.g. 25XXXXXX" />
                     </div>
                     <div className="space-y-2">
                       <Label>Contact Number <span className="text-red-500">*</span></Label>
